@@ -1,0 +1,23 @@
+# permissions for end users to view appservices.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: controller-demo
+    app.kubernetes.io/managed-by: kustomize
+  name: appservice-viewer-role
+rules:
+- apiGroups:
+  - batch.appservice.com
+  resources:
+  - appservices
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - batch.appservice.com
+  resources:
+  - appservices/status
+  verbs:
+  - get

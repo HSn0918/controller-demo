@@ -1,0 +1,89 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: controller-demo-sa
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: controller-demo
+spec:
+  selector:
+    matchLabels:
+      app: controller-demo
+  template:
+    metadata:
+      labels:
+        app: controller-demo
+    spec:
+      serviceAccountName: controller-demo-sa
+      containers:
+        - name: controller-demo
+          image: 10.10.103.155/testdemo/controller-demo:latest
+          imagePullPolicy: Always
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: controller-demo-role
+rules:
+  - apiGroups:
+      - "batch.appservice.com"
+    resources:
+      - appservices
+    verbs:
+      - get
+      - list
+      - create
+      - delete
+      - update
+      - patch
+  - apiGroups:
+      - "apps"
+    resources:
+      - deployments
+    verbs:
+      - get
+      - list
+      - create
+      - delete
+      - update
+      - patch
+  - apiGroups:
+      - ""
+    resources:
+      - services
+    verbs:
+      - get
+      - list
+      - create
+      - delete
+      - update
+      - patch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: controller-demo-rolebinding
+subjects:
+  - kind: ServiceAccount
+    name: controller-demo-sa
+    namespace: caas-system
+roleRef:
+  kind: ClusterRole
+  name: controller-demo-role
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webhook-service
+spec:
+  selector:
+    app: controller-demo
+  ports:
+    - port: 9443
+      targetPort: 9443
+      protocol: TCP
+      name: controller-demo
