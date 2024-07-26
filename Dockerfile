@@ -6,7 +6,6 @@ ARG TARGETARCH
 WORKDIR /workspace
 # Cache dependencies
 COPY go.mod go.sum ./
-RUN go mod download
 
 # Copy the go source
 COPY cmd/main.go cmd/main.go
