@@ -20,7 +20,7 @@ spec:
       serviceAccountName: controller-demo-sa
       containers:
         - name: controller-demo
-          image: 10.10.103.155/testdemo/controller-demo:latest
+          image: controller-demo
           imagePullPolicy: Always
 ---
 apiVersion: rbac.authorization.k8s.io/v1

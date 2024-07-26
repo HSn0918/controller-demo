@@ -6,14 +6,13 @@ ARG TARGETARCH
 WORKDIR /workspace
 # Cache dependencies
 COPY go.mod go.sum ./
-RUN go mod tidy
 
 # Copy the go source
 COPY cmd/main.go cmd/main.go
 COPY api/ api/
 COPY internal/controller/ internal/controller/
 COPY utils/ utils/
-
+COPY vendor vendor
 # Build
 RUN CGO_ENABLED=0 GOOS=${TARGETOS:-linux} GOARCH=${TARGETARCH} go build -mod=vendor -a -o manager cmd/main.go
 
