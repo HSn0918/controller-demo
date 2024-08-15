@@ -3,7 +3,7 @@ kind: AppService
 metadata:
   name: nginx-app
   # 修改成你的namespace
-  namespace: caas-system
+#  namespace: caas-system
 spec:
   image: nginx
   replicas: 1
